@@ -32,7 +32,7 @@ if __name__ == '__main__':
         'partial_token_prefix': ''
     }
 
-    MODELS_DIR = ""
+    MODELS_DIR = "./llm_models"
     model_name = "Llama-2-7b-hf" 
     lm = ecco.from_pretrained(os.path.join(MODELS_DIR, model_name), model_config=llama2_model_config, activations=True)
     lm.model.config._name_or_path = model_name

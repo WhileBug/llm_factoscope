@@ -384,10 +384,7 @@ def main(model_name, split_list, support_size, emb_dim=24):
     torch.manual_seed(random_seed)
     np.random.seed(random_seed)
 
-    dataset_name_dict = {'gpt2-xl': ['year_olympicscity', 'city_country', 'athlete_sport', 
-                    'final_company', 'final_nobel_birth_country', 'movie_name_director', 
-                    'river_country', 'final_nobel_year', 'movie_name_year', 'multi', 'movie_name_writer', 'book_author', 'final_nobel_category', 'pantheon_country', 'pantheon_occupation', 'athlete_country'], 'Llama-2-7b-hf': ['athlete_country', 'artwork_artist', 'city_country', 'athlete_sport', 'book_author', 'final_company', 'final_nobel_birth_country', 'final_nobel_category', 'movie_name_director', 'river_country', 'final_nobel_year', 'movie_name_year', 'pantheon_country', 'pantheon_occupation', 'multi'], 'vicuna-7b-v1.5': ['year_olympicscity', 'city_country', 'athlete_sport', 'book_author', 'final_company', 'final_nobel_birth_country', 'final_nobel_category', 'movie_name_director', 'river_country', 'final_nobel_year', 'movie_name_year', 'pantheon_country', 'pantheon_occupation', 'multi', 'athlete_country', 'movie_name_writer'], 'Llama-2-13b-chat-hf': ['athlete_country', 'artwork_artist', 'city_country', 'athlete_sport', 'book_author', 'final_company', 'final_nobel_birth_country', 'final_nobel_category', 'movie_name_director', 'river_country', 'final_nobel_year', 'movie_name_year', 'pantheon_country', 'pantheon_occupation', 'multi'], 'stablelm-tuned-alpha-7b': ['artwork_artist', 'athlete_sport', 'book_author', 'final_company', 'final_nobel_birth_country', 'final_nobel_category', 'river_country', 'movie_name_year', 'pantheon_country', 'pantheon_occupation', 'multi'], 'vicuna-13b-v1.5':['year_olympicscity', 'city_country', 'athlete_sport', 'book_author', 'final_company', 'final_nobel_birth_country', 'final_nobel_category', 'movie_name_director', 'river_country', 'final_nobel_year', 'movie_name_year', 'pantheon_country', 'pantheon_occupation', 'multi', 'athlete_country', 'movie_name_writer']
-                    }
+    dataset_name_dict = {'Llama-2-7b-hf': ['multi']}
     act_dim_dict = {'gpt2-xl': 6400, 'Llama-2-7b-hf': 11008, 'vicuna-7b-v1.5': 11008,
                     'Llama-2-13b-chat-hf': 13824, 'vicuna-13b-v1.5': 13824, 'stablelm-tuned-alpha-7b': 24576}
 
