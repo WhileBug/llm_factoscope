@@ -22,6 +22,28 @@ def append_to_hdf5(file_path, dataset_name, new_data):
             dset[current_size:] = new_data
         else:
             f.create_dataset(dataset_name, data=new_data, maxshape=(None, *new_data.shape[1:]))
+
+def append_to_json_stream(file_path, new_data):
+    with open(file_path, 'a', encoding='utf-8') as file:
+        json_record = json.dumps(new_data, ensure_ascii=False)
+        file.write(json_record + '\n')
+
+def append_to_json(
+        file_path, 
+        input_text,
+        true_answer,
+        output_answer
+    ):
+    new_data = {
+            "input_text": input_text,
+            "true_answer": true_answer,
+            "output_answer": output_answer
+    }
+    if not os.path.exists(file_path):
+        f = open(file_path, "w+")
+        f.write(json.dumps(new_data, ensure_ascii=False))
+    else:
+        append_to_json_stream(file_path, new_data)
             
 if __name__ == '__main__':
     llama2_model_config = {    
@@ -84,6 +106,10 @@ if __name__ == '__main__':
             source = current_file_path.split('/')[-1]
             len_input = len(input_text.split(' '))
             output = lm.generate(input_text, generate=10, do_sample=False, output_hidden_states=True)
+
+            true_answer = entry['answer']
+            output_answer = output.output_text
+
             if model_name == "gpt2-xl":
                 if len(output.output_text.split(' ')) < (len_input + 1):
                     continue
@@ -114,7 +140,22 @@ if __name__ == '__main__':
             
             first_token = first_token.lower()
             target = target.lower()
-            if first_token == target:
+
+        
+            append_to_json(
+                file_path='./features/{}/{}_dataset/store_data.json'.format(model_name,file_name[file_index]), 
+                input_text=input_text,
+                true_answer=true_answer,
+                output_answer=output_answer
+            )
+
+            append_to_hdf5('./features/{}/{}_dataset/store_data.h5'.format(model_name,file_name[file_index]), 'activation_values', output.activations['decoder'][0,:,:,output.n_input_tokens])
+            append_to_hdf5('./features/{}/{}_dataset/store_data.h5'.format(model_name,file_name[file_index]), 'final_output_rank', ranking_data['rankings'][:,0])
+            append_to_hdf5('./features/{}/{}_dataset/store_data.h5'.format(model_name,file_name[file_index]), 'word_id_topk_rank', location.cpu().detach().numpy())
+            append_to_hdf5('./features/{}/{}_dataset/store_data.h5'.format(model_name,file_name[file_index]), 'topk_rank_prob', prob.cpu().detach().numpy())
+
+            '''
+            if "True" in query_result:#first_token == target:
                 correct_counter += 1    
                 total_correct += 1
                 correct_prompt.append(new_data)
@@ -124,7 +165,7 @@ if __name__ == '__main__':
                 append_to_hdf5('./features/{}/{}_dataset/correct_data.h5'.format(model_name,file_name[file_index]), 'correct_final_output_rank', ranking_data['rankings'][:,0])
                 append_to_hdf5('./features/{}/{}_dataset/correct_data.h5'.format(model_name,file_name[file_index]), 'correct_word_id_topk_rank', location.cpu().detach().numpy())
                 append_to_hdf5('./features/{}/{}_dataset/correct_data.h5'.format(model_name,file_name[file_index]), 'correct_topk_rank_prob', prob.cpu().detach().numpy())
-            elif first_token != target and first_token != 'the' and first_token != 'a' and first_token != 'an' and first_token != 'this' and first_token != 'that' and first_token != 'these' and first_token != 'those' and first_token != 'my' and first_token != 'your' and first_token != 'his' and first_token != 'her' and first_token != 'its' and first_token != 'our' and first_token != 'their' and first_token != 'few' and first_token != 'little' and first_token != 'much' and first_token != 'many' and first_token != 'lot' and first_token != 'most' and first_token != 'some' and first_token != 'any' and first_token != 'enough' and first_token != 'all' and first_token != 'both' and first_token != 'half' and first_token != 'either' and first_token != 'neither' and first_token != 'each' and first_token != 'every' and first_token != 'other' and first_token != 'another' and first_token != 'such' and first_token != 'what' and first_token != 'rather' and first_token != 'quite' and first_token != 'same' and first_token != 'different' and first_token != 'such' and first_token != 'when' and first_token != 'while' and first_token != 'who' and first_token != 'whom' and first_token != 'which' and first_token != 'where' and first_token != 'why' and first_token != 'how' and first_token != 'i' and first_token != 'you' and first_token != 'he' and first_token != 'she' and first_token != 'it' and first_token != 'we' and first_token != 'they' and first_token != 'me' and first_token != 'him' and first_token != 'her' and first_token != 'us' and first_token != 'them' and first_token != 'myself' and first_token != 'yourself' and first_token != 'himself' and first_token != 'herself' and first_token != 'itself' and first_token != 'ourselves' and first_token != 'themselves' and first_token != 'to' and first_token != 'of' and first_token != 'not' and first_token != 'at' and first_token != '"':
+            elif "False" in query_result:#first_token != target and first_token != 'the' and first_token != 'a' and first_token != 'an' and first_token != 'this' and first_token != 'that' and first_token != 'these' and first_token != 'those' and first_token != 'my' and first_token != 'your' and first_token != 'his' and first_token != 'her' and first_token != 'its' and first_token != 'our' and first_token != 'their' and first_token != 'few' and first_token != 'little' and first_token != 'much' and first_token != 'many' and first_token != 'lot' and first_token != 'most' and first_token != 'some' and first_token != 'any' and first_token != 'enough' and first_token != 'all' and first_token != 'both' and first_token != 'half' and first_token != 'either' and first_token != 'neither' and first_token != 'each' and first_token != 'every' and first_token != 'other' and first_token != 'another' and first_token != 'such' and first_token != 'what' and first_token != 'rather' and first_token != 'quite' and first_token != 'same' and first_token != 'different' and first_token != 'such' and first_token != 'when' and first_token != 'while' and first_token != 'who' and first_token != 'whom' and first_token != 'which' and first_token != 'where' and first_token != 'why' and first_token != 'how' and first_token != 'i' and first_token != 'you' and first_token != 'he' and first_token != 'she' and first_token != 'it' and first_token != 'we' and first_token != 'they' and first_token != 'me' and first_token != 'him' and first_token != 'her' and first_token != 'us' and first_token != 'them' and first_token != 'myself' and first_token != 'yourself' and first_token != 'himself' and first_token != 'herself' and first_token != 'itself' and first_token != 'ourselves' and first_token != 'themselves' and first_token != 'to' and first_token != 'of' and first_token != 'not' and first_token != 'at' and first_token != '"':
                 false_counter += 1
                 false_prompt.append(new_data)
                 with open("./features/{}/{}_dataset/false_data.json".format(model_name,file_name[file_index]), "w", encoding="utf-8") as f:
@@ -142,7 +183,7 @@ if __name__ == '__main__':
                 append_to_hdf5('./features/{}/{}_dataset/unrelative_data.h5'.format(model_name,file_name[file_index]), 'unrelative_final_output_rank', ranking_data['rankings'][:,0])
                 append_to_hdf5('./features/{}/{}_dataset/unrelative_data.h5'.format(model_name,file_name[file_index]), 'unrelative_word_id_topk_rank', location.cpu().detach().numpy())
                 append_to_hdf5('./features/{}/{}_dataset/unrelative_data.h5'.format(model_name,file_name[file_index]), 'unrelative_topk_rank_prob', prob.cpu().detach().numpy())
-                
+            '''
 
     print(correct_counter)
     print(unrelative_counter)

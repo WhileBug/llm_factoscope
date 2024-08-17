@@ -384,7 +384,7 @@ def main(model_name, split_list, support_size, emb_dim=24):
     torch.manual_seed(random_seed)
     np.random.seed(random_seed)
 
-    dataset_name_dict = {'Llama-2-7b-hf': ['multi']}
+    dataset_name_dict = {'Llama-2-7b-hf': ['HaluEval_qa']}
     act_dim_dict = {'gpt2-xl': 6400, 'Llama-2-7b-hf': 11008, 'vicuna-7b-v1.5': 11008,
                     'Llama-2-13b-chat-hf': 13824, 'vicuna-13b-v1.5': 13824, 'stablelm-tuned-alpha-7b': 24576}
 
