@@ -141,7 +141,7 @@ if __name__ == '__main__':
             first_token = first_token.lower()
             target = target.lower()
 
-        
+            '''
             append_to_json(
                 file_path='./features/{}/{}_dataset/store_data.json'.format(model_name,file_name[file_index]), 
                 input_text=input_text,
@@ -153,9 +153,9 @@ if __name__ == '__main__':
             append_to_hdf5('./features/{}/{}_dataset/store_data.h5'.format(model_name,file_name[file_index]), 'final_output_rank', ranking_data['rankings'][:,0])
             append_to_hdf5('./features/{}/{}_dataset/store_data.h5'.format(model_name,file_name[file_index]), 'word_id_topk_rank', location.cpu().detach().numpy())
             append_to_hdf5('./features/{}/{}_dataset/store_data.h5'.format(model_name,file_name[file_index]), 'topk_rank_prob', prob.cpu().detach().numpy())
-
             '''
-            if "True" in query_result:#first_token == target:
+            #'''
+            if first_token == target:
                 correct_counter += 1    
                 total_correct += 1
                 correct_prompt.append(new_data)
@@ -165,7 +165,7 @@ if __name__ == '__main__':
                 append_to_hdf5('./features/{}/{}_dataset/correct_data.h5'.format(model_name,file_name[file_index]), 'correct_final_output_rank', ranking_data['rankings'][:,0])
                 append_to_hdf5('./features/{}/{}_dataset/correct_data.h5'.format(model_name,file_name[file_index]), 'correct_word_id_topk_rank', location.cpu().detach().numpy())
                 append_to_hdf5('./features/{}/{}_dataset/correct_data.h5'.format(model_name,file_name[file_index]), 'correct_topk_rank_prob', prob.cpu().detach().numpy())
-            elif "False" in query_result:#first_token != target and first_token != 'the' and first_token != 'a' and first_token != 'an' and first_token != 'this' and first_token != 'that' and first_token != 'these' and first_token != 'those' and first_token != 'my' and first_token != 'your' and first_token != 'his' and first_token != 'her' and first_token != 'its' and first_token != 'our' and first_token != 'their' and first_token != 'few' and first_token != 'little' and first_token != 'much' and first_token != 'many' and first_token != 'lot' and first_token != 'most' and first_token != 'some' and first_token != 'any' and first_token != 'enough' and first_token != 'all' and first_token != 'both' and first_token != 'half' and first_token != 'either' and first_token != 'neither' and first_token != 'each' and first_token != 'every' and first_token != 'other' and first_token != 'another' and first_token != 'such' and first_token != 'what' and first_token != 'rather' and first_token != 'quite' and first_token != 'same' and first_token != 'different' and first_token != 'such' and first_token != 'when' and first_token != 'while' and first_token != 'who' and first_token != 'whom' and first_token != 'which' and first_token != 'where' and first_token != 'why' and first_token != 'how' and first_token != 'i' and first_token != 'you' and first_token != 'he' and first_token != 'she' and first_token != 'it' and first_token != 'we' and first_token != 'they' and first_token != 'me' and first_token != 'him' and first_token != 'her' and first_token != 'us' and first_token != 'them' and first_token != 'myself' and first_token != 'yourself' and first_token != 'himself' and first_token != 'herself' and first_token != 'itself' and first_token != 'ourselves' and first_token != 'themselves' and first_token != 'to' and first_token != 'of' and first_token != 'not' and first_token != 'at' and first_token != '"':
+            elif first_token != target and first_token != 'the' and first_token != 'a' and first_token != 'an' and first_token != 'this' and first_token != 'that' and first_token != 'these' and first_token != 'those' and first_token != 'my' and first_token != 'your' and first_token != 'his' and first_token != 'her' and first_token != 'its' and first_token != 'our' and first_token != 'their' and first_token != 'few' and first_token != 'little' and first_token != 'much' and first_token != 'many' and first_token != 'lot' and first_token != 'most' and first_token != 'some' and first_token != 'any' and first_token != 'enough' and first_token != 'all' and first_token != 'both' and first_token != 'half' and first_token != 'either' and first_token != 'neither' and first_token != 'each' and first_token != 'every' and first_token != 'other' and first_token != 'another' and first_token != 'such' and first_token != 'what' and first_token != 'rather' and first_token != 'quite' and first_token != 'same' and first_token != 'different' and first_token != 'such' and first_token != 'when' and first_token != 'while' and first_token != 'who' and first_token != 'whom' and first_token != 'which' and first_token != 'where' and first_token != 'why' and first_token != 'how' and first_token != 'i' and first_token != 'you' and first_token != 'he' and first_token != 'she' and first_token != 'it' and first_token != 'we' and first_token != 'they' and first_token != 'me' and first_token != 'him' and first_token != 'her' and first_token != 'us' and first_token != 'them' and first_token != 'myself' and first_token != 'yourself' and first_token != 'himself' and first_token != 'herself' and first_token != 'itself' and first_token != 'ourselves' and first_token != 'themselves' and first_token != 'to' and first_token != 'of' and first_token != 'not' and first_token != 'at' and first_token != '"':
                 false_counter += 1
                 false_prompt.append(new_data)
                 with open("./features/{}/{}_dataset/false_data.json".format(model_name,file_name[file_index]), "w", encoding="utf-8") as f:
@@ -183,7 +183,7 @@ if __name__ == '__main__':
                 append_to_hdf5('./features/{}/{}_dataset/unrelative_data.h5'.format(model_name,file_name[file_index]), 'unrelative_final_output_rank', ranking_data['rankings'][:,0])
                 append_to_hdf5('./features/{}/{}_dataset/unrelative_data.h5'.format(model_name,file_name[file_index]), 'unrelative_word_id_topk_rank', location.cpu().detach().numpy())
                 append_to_hdf5('./features/{}/{}_dataset/unrelative_data.h5'.format(model_name,file_name[file_index]), 'unrelative_topk_rank_prob', prob.cpu().detach().numpy())
-            '''
+            #'''
 
     print(correct_counter)
     print(unrelative_counter)

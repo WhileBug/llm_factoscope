@@ -170,7 +170,7 @@ def save_processed_data(file_path, data_dict):
 def main():
     np.random.seed(random_seed)
     # load dataset
-    dataset_name = ["HaluEval_qa"]#['movie_name_writer', 'year_olympicscity', 'athlete_country', 'artwork_artist', 'city_country', 'athlete_sport', 'book_author', 'final_company', 'final_nobel_birth_country', 'final_nobel_category', 'final_song_artist', 'movie_name_director', 'river_country', 'final_nobel_year', 'movie_name_year', 'pantheon_country', 'pantheon_occupation', 'multi']
+    dataset_name = ["multi"]#["HaluEval_qa"]#['movie_name_writer', 'year_olympicscity', 'athlete_country', 'artwork_artist', 'city_country', 'athlete_sport', 'book_author', 'final_company', 'final_nobel_birth_country', 'final_nobel_category', 'final_song_artist', 'movie_name_director', 'river_country', 'final_nobel_year', 'movie_name_year', 'pantheon_country', 'pantheon_occupation', 'multi']
 
     llama2_model_config = {    
         'embedding': "model.embed_tokens.weight",
